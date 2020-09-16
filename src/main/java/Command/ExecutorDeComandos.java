@@ -23,7 +23,7 @@ public class ExecutorDeComandos {
 
 		Command command = feitos.pop();
 		desfeitos.push(command);
-		return command.fazer();
+		return command.desfazer();
 	}
 
 	public String refazer() {

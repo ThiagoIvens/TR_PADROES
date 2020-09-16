@@ -5,14 +5,14 @@ public class SystemOp {
 		super();
 	}
 
-	public String verificaOpcao(String opcao) {
+	public void verificaOpcao(String opcao) {
 		if (opcao.contentEquals("Descarga")) {
-			return "Conteiner encaminhado para operação de Descarga";
+			System.out.println( "[Operacional] Conteiner encaminhado para operação de Descarga");
 		} else {
 			if (opcao.contentEquals("Carga")) {
-				return "Conteiner encaminhado para operação de Carga";
+				System.out.println("[Operacional] Conteiner encaminhado para operação de Carga");
 			} else {
-				return "Operação inexistente!";
+				System.out.println("[Operacional] Operação inexistente!");
 			}
 		}
 	}

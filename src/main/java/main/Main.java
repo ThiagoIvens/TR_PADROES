@@ -10,9 +10,16 @@ import Bridge.Visualizador;
 import Bridge.VisualizadorConsole;
 import Command.Evento;
 import Command.ExecutorDeComandos;
+import DoubleDispatch.PatioDeTU;
+import DoubleDispatch.SetorDD;
+import DoubleDispatch.SetorMovimentacaoTU;
+import DoubleDispatch.SistemaPortuario;
 import Facade.Fachada;
 import FluentInterfaces.CaminhaoFI;
 import FluentInterfaces.Motorista;
+import Flyweight.ContainerInf;
+import Flyweight.CorTU;
+import Flyweight.TUFabrica;
 import NullObject.ContainerNullObject;
 import NullObject.FactoryForCreate;
 import NullObject.SeguroDoContainer;
@@ -180,10 +187,14 @@ public class Main {
 			switch (new Scanner(System.in).nextInt()) {
 			case 1:
 				System.out.println("Fluent Interfaces\n");
+				
 				CaminhaoFI caminhao = new CaminhaoFI().comPlaca("HJK4930");
+				
 				Motorista motorista = new Motorista().chamado("Wilson").comCPF("10253230926").donoDoCaminhao(caminhao);
+				
 				System.out.println("Motorista: " + motorista.getNome() + ", com CPF: " + motorista.getCpf()
 						+ " e dono do caminhao de placa: " + motorista.getCaminhao().getPlaca());
+				
 				break;
 			case 2:
 				System.out.println("Command Pattern\n");
@@ -206,14 +217,28 @@ public class Main {
 				eventos = executor.refazer();
 				System.out.println("5- "+ eventos);
 				
-				eventos = executor.fazer(new Evento(eventos, "INBOUND "));
+				eventos = executor.refazer();
 				System.out.println("6- "+ eventos);
 				
-				eventos = executor.fazer(new Evento(eventos, "INWARD "));
+				eventos = executor.fazer(new Evento(eventos, "INYARD "));
 				System.out.println("7- "+ eventos);
+				
+				eventos = executor.desfazer();
+				System.out.println("8- "+ eventos);
 				break;
 			case 3:
 				System.out.println("Double Dispatch\n");
+					
+				PatioDeTU patioA = new PatioDeTU(100, 5, 6.5);
+				PatioDeTU patioB = new PatioDeTU(50, 3, 8);
+				SetorMovimentacaoTU smt = new SetorMovimentacaoTU(20, 50);
+				
+				SistemaPortuario sisPorto = new SistemaPortuario();
+				sisPorto.addSetor(patioA);
+				sisPorto.addSetor(patioB);
+				sisPorto.addSetor(smt);
+				
+				System.out.println("Custo Das Operações: " + sisPorto.getTotal());
 				
 				break;
 			case 4:
@@ -227,9 +252,21 @@ public class Main {
 				break;
 			case 5:
 				System.out.println("Flyweight\n");
-					
+					for(int i=0; i<200; i++) {
+						ContainerInf tu = (ContainerInf)TUFabrica.getTU(CorTU.getCorDoTU());
+						tu.setCodigo(String.valueOf(randomInt(1000, 99999)));
+						tu.Imprimir();
+					}
+					Runtime r = Runtime.getRuntime();
+					long memory = (r.totalMemory() - r.freeMemory())/1024/1024;
+					System.out.println("Memoria Usada: "+ memory+" MB");
 				break;
 			}
 		}
 	}	
+	
+	public static int randomInt(int min, int max) {
+		return (int) (min + Math.floor((max - min) * Math.random()));
+	}
 }
+
